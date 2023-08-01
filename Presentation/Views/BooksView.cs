@@ -24,8 +24,6 @@ namespace Module25.Presentation.Views
             ShowSortedByTitle();
             ShowSortedByPublishedYear();
             ShowAthorsBooksCount();
-
-            Console.ReadLine();
         }
 
         private void ShowAthorsBooksCount()

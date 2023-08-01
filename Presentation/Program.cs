@@ -23,6 +23,8 @@ namespace Module25.Presentation
 
                 new BooksView(bookRepository).Show();
                 new UsersView(userRepository).Show();
+
+                Console.ReadLine();
             }
         }
 
