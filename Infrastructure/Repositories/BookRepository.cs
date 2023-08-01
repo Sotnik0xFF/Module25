@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Module25.Infrastructure.Repositories
 {
@@ -45,7 +46,12 @@ namespace Module25.Infrastructure.Repositories
 
         public IEnumerable<Book> GetAll()
         {
-            return _context.Books.Include(b => b.Owner).ToList();
+            IEnumerable<Book> books = _context.Books.Include(b => b.Owner).ToList();
+            foreach (Book book in books)
+            {
+                LoadBookData(book);
+            }
+            return books;
         }
 
         public IEnumerable<Author> GetAllAuthors()
@@ -53,14 +59,24 @@ namespace Module25.Infrastructure.Repositories
             return _context.Authors.ToList();
         }
 
-        public IEnumerable<Book> GetAllBooksSortedByPublicationYearDESC()
+        public IEnumerable<Book> GetAllBooksSortedByPublishedYearDESC()
         {
-            return _context.Books.OrderByDescending(b => b.PublishedYear).ToList();
+            IEnumerable<Book> books = _context.Books.OrderByDescending(b => b.PublishedYear).ToList();
+            foreach (Book book in books)
+            {
+                LoadBookData(book);
+            }
+            return books;
         }
 
         public IEnumerable<Book> GetAllBooksSortedByTitle()
         {
-            return _context.Books.OrderBy(b => b.Title).ToList();
+            IEnumerable<Book> books = _context.Books.OrderBy(b => b.Title).ToList();
+            foreach (Book book in books)
+            {
+                LoadBookData(book);
+            }
+            return books;
         }
 
         public IEnumerable<Genre> GetAllGenres()
@@ -86,7 +102,10 @@ namespace Module25.Infrastructure.Repositories
         public Book? GetLastPublicated()
         {
             int maxPublishedYear = _context.Books.Max(b => b.PublishedYear);
-            return _context.Books.FirstOrDefault(b => b.PublishedYear == maxPublishedYear);
+            Book? book = _context.Books.FirstOrDefault(b => b.PublishedYear == maxPublishedYear);
+            if (book != null)
+                LoadBookData(book);
+            return book;
         }
 
         public bool HasBook(Author author, string title)
@@ -103,6 +122,12 @@ namespace Module25.Infrastructure.Repositories
 
             book.PublishedYear = year;
             _context.SaveChanges();
+        }
+
+        private void LoadBookData(Book book)
+        {
+            _context.Entry(book).Collection(b => b.Genres).Load();
+            _context.Entry(book).Collection(b => b.Authors).Load();
         }
     }
 }

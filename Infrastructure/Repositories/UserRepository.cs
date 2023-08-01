@@ -35,7 +35,7 @@ namespace Module25.Infrastructure.Repositories
             User? user = _context.Users.Find(id);
             if (user != null)
             {
-                _context.Entry(user).Collection(u => u.Books).Load();
+                LoadData(user);
             }
             return user;
         }
@@ -45,7 +45,7 @@ namespace Module25.Infrastructure.Repositories
             List<User> users = _context.Users.ToList();
             foreach (var user in users)
             {
-                _context.Entry(user).Collection(u => u.Books).Load();
+                LoadData(user);
             }
             return users;
         }
@@ -63,6 +63,11 @@ namespace Module25.Infrastructure.Repositories
                 throw new ArgumentException("Id not found.", nameof(id));
             user.Name = name;
             _context.SaveChanges();
+        }
+
+        private void LoadData(User user)
+        {
+            _context.Entry(user).Collection(u => u.Books).Load();
         }
     }
 }

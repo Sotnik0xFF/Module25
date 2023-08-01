@@ -17,7 +17,7 @@ namespace Module25.Domain.BookAggregate
         int GetBooksCountByGenre(Genre genre);
         int GetBooksCountByOwner(User owner);
         IEnumerable<Book> GetAllBooksSortedByTitle();
-        IEnumerable<Book> GetAllBooksSortedByPublicationYearDESC();
+        IEnumerable<Book> GetAllBooksSortedByPublishedYearDESC();
         Book? GetLastPublicated();
         IEnumerable<Book> FindBooksByGenreAndYear(Genre genre, int fromYear, int toYear);
         bool HasBook(Author author, string title);
