@@ -17,9 +17,9 @@ namespace Module25.Infrastructure
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            Directory.CreateDirectory("Data");
+            DirectoryInfo dataDir = Directory.CreateDirectory("Data");
             SqliteConnectionStringBuilder connectionStringBuilder = new SqliteConnectionStringBuilder();
-            connectionStringBuilder.DataSource = Path.Combine(Directory.GetCurrentDirectory(), "Data", "elibdata.db");
+            connectionStringBuilder.DataSource = Path.Combine(dataDir.FullName, "elibdata.db");
             optionsBuilder.UseSqlite(connectionStringBuilder.ConnectionString);
         }
 
